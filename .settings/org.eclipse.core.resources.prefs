@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+encoding//com/trunk/bo/loginBO.py=utf-8
+encoding//com/trunk/other/basepage.py=utf-8
+encoding//com/trunk/other/locator.py=utf-8
+encoding//com/trunk/other/loginTest.py=utf-8
+encoding//com/trunk/other/loginpage.py=utf-8
+encoding//com/trunk/page/basepageelement.py=utf-8
+encoding//com/trunk/page/basepageobject.py=utf-8
+encoding//com/trunk/page/login.py=utf-8
+encoding//com/trunk/page/test3.py=utf-8
