@@ -15,7 +15,8 @@ class LoginPage(BasePage):
     @staticmethod
     def getInputField(category):
 #         by = By.CSS_SELECTOR("%s" % category)
-        return "inputField" 
+#         (By.LINK_TEXT, 'Clear All')
+        return category 
     
     
     

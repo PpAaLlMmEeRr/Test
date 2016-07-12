@@ -4,8 +4,9 @@ Created on 2016年7月6日
 
 @author: Palmer.Piao
 '''
-import logging
+import logging,time
 from selenium import webdriver
+from com.trunk.exception.Exceptions import ElementVisibleTimeout
 
 class BasePage(object):
     '''
@@ -48,14 +49,12 @@ class BasePage(object):
         console.setLevel(logging.DEBUG)
         logging.debug('This is debug message')
 #         self.stopDriver()
+    def getDriverFromPO(self):
+        return self.driver
     
     def start(self):
         self.driver.get(self.base_url)
         assert self.checkTitle(self.title), u"open page failed. url = %s" % self.base_url  
-    
-#     @staticmethod
-    def stopDriver(self):
-        self.driver.quit()
     
     def checkTitle(self,title):
 #         _re = title in self.driver.title
@@ -76,6 +75,8 @@ class BasePage(object):
 #         wd.find_element(by, value)
 #         pass
     
+    
+    
     def findElements(self):
         pass    
     
@@ -86,5 +87,32 @@ class BasePage(object):
         
     def _sendKey(self, value):
         self.element.send_keys(value)
-        print "setElement result is %s" % self.element
+        print "_sendKey result is %s" % self.element
+        
+        
+    def is_element_available(self, locator):
+        if self.driver.is_element_present(locator):
+            if self.driver.is_visible(locator):
+                return True
+            else:
+                return False
+        else:
+            return False
+    
+    def wait_for_available(self, locator):
+        """
+        Synchronization to deal with elements that are present, and are visible
+
+        :raises: ElementVisibleTimeout
+        """
+        for i in range(5):
+            try:
+                if self.is_element_available(locator):
+                    break
+            except:
+                pass
+            time.sleep(1)
+        else:
+            raise ElementVisibleTimeout("%s availability timed out" % locator)
+        return True
         

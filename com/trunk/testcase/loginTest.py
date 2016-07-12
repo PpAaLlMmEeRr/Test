@@ -4,7 +4,7 @@ Created on 2016年7月6日
 
 @author: Palmer.Piao
 '''
-import unittest
+import time,unittest
 
 from selenium import webdriver
 
@@ -12,38 +12,34 @@ from com.trunk.bo.loginBO import LoginBO
 from com.trunk.page.basepage import BasePage
 from com.trunk.page.loginpage import LoginPage
 from com.trunk.page.locator import Locator
-
+from com.trunk.seleniumfactory.SeleniumFactory import *
 
 class Test(unittest.TestCase):
     
 
     def setUp(self):
 # 开启webdriver
-        self.driver = webdriver.Chrome()
-        self.driver.implicitly_wait(30)
-#         Locator.setDriver(self.driver)
-        
-        pass
-    
-        
+#         self.driver = webdriver.Chrome()
+#         self.driver.implicitly_wait(30)
+        self.driver = SeleniumFactory().createWebDriver()
+#         self.driver = SeleniumFactory().create()
 
     def tearDown(self):
 #         关闭webdriver
-#         self.driver.quit()
-#         self.lbo.locator.stoplocator()
         self.driver.quit()
         pass
 
 
-    def testName(self):
+    def testLoginSuccess(self):
 #         测试login
-#         wd = "网易"
-# #         login_page = LoginPage(wd,"https://172.16.15.166/")
-#         lbo = LoginBO()
-#         lbo.run()
         self.lbo = LoginBO(self.driver)
+#         self.lbo.pageobject.wait_for_available("-locator-")
         self.lbo.run()
-        pass
+#         print os.environ
+#     def testLoginFail(self):
+# #         测试login
+#         self.lbo = LoginBO(self.driver)
+#         self.lbo.run()
 
 
 if __name__ == "__main__":
