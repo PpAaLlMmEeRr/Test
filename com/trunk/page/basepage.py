@@ -69,8 +69,8 @@ class BasePage(object):
     def sendText(self):
         pass
     
-    def click(self):
-        pass
+    def _click(self):
+        self.element.click()
 
 #     def findElement(self):
 #         wd.find_element(by, value)

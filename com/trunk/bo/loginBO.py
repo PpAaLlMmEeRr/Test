@@ -21,9 +21,11 @@ class LoginBO(object):
     def run(self):
 #         self.locator.getLocator(xpath/css locator,po object) return PO object
 #             ._sendKey("admin")
-        self.locator.getLocator(LoginPage.getInputField("id=id_usernam1e"),self.pageobject)._sendKey("admin")
+        self.locator.getLocator(LoginPage.getInputField("id=id_username"),self.pageobject)._sendKey("admin")
         time.sleep(1)
         self.locator.getLocator(LoginPage.getInputField("id=id_password"),self.pageobject)._sendKey("netis")
+        time.sleep(1)
+        self.locator.getLocator(LoginPage.getInputField("css=button.btn.btn-primary"),self.pageobject)._click()
         time.sleep(1)
         
         
