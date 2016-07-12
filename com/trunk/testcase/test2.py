@@ -11,6 +11,8 @@ from com.trunk.page.loginpage import LoginPage
 from com.trunk.page.locator import Locator
 from com.trunk.seleniumfactory.SeleniumFactory import *
 from com.trunk.exception.Exceptions import *
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import unittest,time
 
 
@@ -37,32 +39,26 @@ class Test(unittest.TestCase):
         self.is_element_available("css=#id_password")
 
 
-
-    def is_element_available(self, locator):
-        if self.driver.is_element_present(locator):
-            if self.driver.is_visible(locator):
-                return True
-            else:
-                return False
-        else:
-            return False
-    
-    def wait_for_available(self, locator):
-        """
-        Synchronization to deal with elements that are present, and are visible
-
-        :raises: ElementVisibleTimeout
-        """
-        for i in range(5):
-            try:
-                if self.is_element_available(locator):
-                    break
-            except:
-                pass
-            time.sleep(1)
-        else:
-            raise ElementVisibleTimeout("%s availability timed out" % locator)
-        return True
+#     #重写元素定位方法
+#     def find_element(self, *loc):
+#         #return self.driver.find_element(*loc)
+#         try:
+#             WebDriverWait(self.driver, 15).until(lambda driver: driver.find_element(*loc).is_displayed())
+# #             WebDriverWait(self.driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, csslocator)))
+# #             WebDriverWait(self.driver, 30).until(EC.element_to_be_clickable((By.CSS_SELECTOR,csslocator)))
+#             return self.driver.find_element(*loc)
+#         except:
+#             print u"%s 页面中未能找到 %s 元素" % (self, loc)
+# 
+#     #重写一组元素定位方法
+#     def find_elements(self, *loc):
+#         #return self.driver.find_element(*loc)
+#         try:
+#             if len(self.driver.find_elements(*loc)):
+#                 return self.driver.find_elements(*loc)
+#         except:
+#             print u"%s 页面中未能找到 %s 元素" % (self, loc)
+            
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

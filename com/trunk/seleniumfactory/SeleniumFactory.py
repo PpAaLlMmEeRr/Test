@@ -157,4 +157,4 @@ class SeleniumFactory:
             return wrapper
 
         else:
-            return webdriver.Firefox()
+            return webdriver.Chrome()

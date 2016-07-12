@@ -19,10 +19,7 @@ class Test(unittest.TestCase):
 
     def setUp(self):
 # 开启webdriver
-#         self.driver = webdriver.Chrome()
-#         self.driver.implicitly_wait(30)
         self.driver = SeleniumFactory().createWebDriver()
-#         self.driver = SeleniumFactory().create()
 
     def tearDown(self):
 #         关闭webdriver
@@ -33,13 +30,7 @@ class Test(unittest.TestCase):
     def testLoginSuccess(self):
 #         测试login
         self.lbo = LoginBO(self.driver)
-#         self.lbo.pageobject.wait_for_available("-locator-")
         self.lbo.run()
-#         print os.environ
-#     def testLoginFail(self):
-# #         测试login
-#         self.lbo = LoginBO(self.driver)
-#         self.lbo.run()
 
 
 if __name__ == "__main__":

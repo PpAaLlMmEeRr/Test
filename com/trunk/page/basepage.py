@@ -6,12 +6,13 @@ Created on 2016年7月6日
 '''
 import logging,time
 from selenium import webdriver
-from com.trunk.exception.Exceptions import ElementVisibleTimeout
+from selenium.webdriver.support.wait import WebDriverWait
 
 class BasePage(object):
     '''
     classdocs
     '''
+    pagename = "BasePage"
     def __init__(self,*tupleArg,**dictArg):
         for  key in dictArg:
             if key == "title":
@@ -90,29 +91,21 @@ class BasePage(object):
         print "_sendKey result is %s" % self.element
         
         
-    def is_element_available(self, locator):
-        if self.driver.is_element_present(locator):
-            if self.driver.is_visible(locator):
-                return True
-            else:
-                return False
-        else:
-            return False
-    
-    def wait_for_available(self, locator):
-        """
-        Synchronization to deal with elements that are present, and are visible
-
-        :raises: ElementVisibleTimeout
-        """
-        for i in range(5):
-            try:
-                if self.is_element_available(locator):
-                    break
-            except:
-                pass
-            time.sleep(1)
-        else:
-            raise ElementVisibleTimeout("%s availability timed out" % locator)
-        return True
+#     #重写元素定位方法
+#     def find_element(self, *loc):
+#         #return self.driver.find_element(*loc)
+#         try:
+#             WebDriverWait(self.driver, 15).until(lambda driver: driver.find_element(*loc).is_displayed())
+#             return self.driver.find_element(*loc)
+#         except:
+#             print u"%s 页面中未能找到 %s 元素" % (self, loc)
+# 
+#     #重写一组元素定位方法
+#     def find_elements(self, *loc):
+#         #return self.driver.find_element(*loc)
+#         try:
+#             if len(self.driver.find_elements(*loc)):
+#                 return self.driver.find_elements(*loc)
+#         except:
+#             print u"%s 页面中未能找到 %s 元素" % (self, loc)
         

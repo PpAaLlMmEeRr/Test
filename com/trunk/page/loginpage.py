@@ -9,6 +9,7 @@ from com.trunk.page.basepage import  BasePage
 
 class LoginPage(BasePage):
     element = None
+    pagename = "LoginPage"
     
     
     
