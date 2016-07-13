@@ -8,6 +8,7 @@ Created on 2016年7月6日
 from com.trunk.page.locator import Locator
 from com.trunk.page.loginpage import LoginPage
 import time
+import ConfigParser
 
 class LoginBO(object):
     locator = Locator()
@@ -15,8 +16,14 @@ class LoginBO(object):
     
     
     def __init__(self,driver):
-        self._page_parameters = {"webdriver":driver,"base_url":"http://172.16.15.166/en-us/accounts/login/?next=/zh-cn/","title":"Sign In"}
+        cf = ConfigParser.ConfigParser()
+        cf.read("..\\testdata\\config.ini")
+        baseurl = cf.get("urlconf", "login_url")
+        login_title = cf.get("pagetitle", "login_title")
+        self._page_parameters = {"webdriver":driver,"base_url":baseurl,"title":login_title}
         self.pageobject = LoginPage(**self._page_parameters)
+        
+        
         
     def run(self):
 #         self.locator.getLocator(xpath/css locator,po object) return PO object
