@@ -85,8 +85,13 @@ class BasePage(object):
     def setElement(self, element):
         self.element = element
         print "setElement result is %s" % self.element
-        
+     
+     
+    def clearInput(self):
+        self.element.clear()
+       
     def _sendKey(self, value):
+        self.clearInput()
         self.element.send_keys(value)
         print "_sendKey result is %s" % self.element
         
