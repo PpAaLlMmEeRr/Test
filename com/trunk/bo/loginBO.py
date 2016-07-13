@@ -26,7 +26,11 @@ class LoginBO(object):
         self.locator.getLocator(LoginPage.getInputField("id=id_password"),self.pageobject)._sendKey("netis")
         time.sleep(1)
         self.locator.getLocator(LoginPage.getInputField("css=button.btn.btn-primary"),self.pageobject)._click()
-        time.sleep(1)
+        time.sleep(3)
+        print self.pageobject.driver.title
+#         self.assertTrue(self.pageobject.driver.title, u"中央仪表台 - NPM")
+        assert u"Central Dashboard - NPM" in self.pageobject.driver.title, u"标题验证错误，expect is Central Dashboard - NPM， but actual is %s" % self.pageobject.driver.title  
+        
         
         
 #         self.locator.getLocator(1,2,**self._page_parameters)
