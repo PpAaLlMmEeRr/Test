@@ -22,7 +22,7 @@ class LoginBO(object):
         login_title = cf.get("pagetitle", "login_title")
         self._page_parameters = {"webdriver":driver,"base_url":baseurl,"title":login_title}
         self.pageobject = LoginPage(**self._page_parameters)
-        
+        self.pageobject.start()
         
         
     def run(self):

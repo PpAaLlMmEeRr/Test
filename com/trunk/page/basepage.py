@@ -5,10 +5,11 @@ Created on 2016年7月6日
 @author: Palmer.Piao
 '''
 import logging,time,os,xlrd
+from com.comman.base import baseObject
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 
-class BasePage(object):
+class BasePage(baseObject):
     '''
     classdocs
     '''
@@ -33,17 +34,8 @@ class BasePage(object):
         try:
             self.driver
         except:
-            print "no driver founed"
-#             self.driver = webdriver.Chrome()
+            print "no driver found"
 
-
-
-#         try:
-#             print "base_url is %s, and driver is %s" % (base_url,selenium_driver)
-#         except:
-#             print "base_url is %s" % (base_url)
-        #Visit and initialize xpaths for the appropriate page
-        self.start() 
         #Initialize the logger object
         
         console = logging.StreamHandler()
@@ -96,6 +88,7 @@ class BasePage(object):
         print "_sendKey result is %s" % self.element
         
     #读取excel文件的table
+    @classmethod
     def setTable(self, filepath, sheetname):
         """
         filepath:文件路径
@@ -107,6 +100,7 @@ class BasePage(object):
         return table
     
     #读取xls表格，使用生成器yield进行按行存储
+    @classmethod
     def getTabledata(self,filepath, sheetname):
         """
         filepath:文件路径
@@ -127,9 +121,18 @@ class BasePage(object):
         table = self.setTable(sheetname=sheetname)
         celldata = table.cell_value(RowNum, ColNum)
         return celldata
-
+    
+    
+    def setLocatePath(self,pathstr):
+        self.filepath = pathstr
+        
     #读取元素标签和元素唯一标识
-    def locate(self, index, filepath="dataEngine\\data.xls", sheetname="element"):
+    def locate(self, index, filepath = "default", sheetname="testelement"):
+        if filepath == "default":
+            filepath = self.filepath
+        else:
+            filepath = filepath
+        
         """
         filepath: 文件路径
         sheetno：Sheet编号
@@ -140,7 +143,25 @@ class BasePage(object):
         for i in range(1, table.nrows):
             if index in table.row_values(i):
                 return table.row_values(i)[1:3]
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    #重写定义send_keys方法
+    def action_send_keys(self, loc, vaule, clear_first=True, click_first=True):
+        try:
+            if click_first:
+                self.find_element(*loc).click()
+            if clear_first:
+                self.find_element(*loc).clear()
+            self.find_element(*loc).send_keys(vaule)
+        except AttributeError:
+            print u"%s 页面中未能找到 %s 元素" % (self, loc)
         
 #     #重写元素定位方法
 #     def find_element(self, *loc):
@@ -162,18 +183,7 @@ class BasePage(object):
 
 
 
-class Action:
-    """
-    BasePage封装所有页面都公用的方法，例如driver, url
-    """
-    driver = None
-    #初始化driver、url、等
-    def __init__(self, base_url=None, pagetitle=None):
-        self.base_url = base_url
-        self.pagetitle = pagetitle
-        # self.driver = webdriver.Firefox()
-        # self.driver.implicitly_wait(30)
-        # self.driver = driver
+
         """
         通过传参选择启动浏览器
         # self.browser = "Firefox" #传入浏览器对象
@@ -259,51 +269,51 @@ class Action:
         else:
             return False
 
-    #读取excel文件的table
-    def setTable(self, filepath, sheetname):
-        """
-        filepath:文件路径
-        sheetname：Sheet名称
-        """
-        data = xlrd.open_workbook(filepath)
-        #通过索引顺序获取Excel表
-        table = data.sheet_by_name(sheetname)
-        return table
-
-    #读取xls表格，使用生成器yield进行按行存储
-    def getTabledata(self,filepath, sheetname):
-        """
-        filepath:文件路径
-        sheetname：Sheet名称
-        """
-        table = self.setTable(filepath, sheetname)
-        for args in range(1, table.nrows):
-            #使用生成器 yield
-            yield table.row_values(args)
-
-    #获取单元格数据
-    def getcelldata(self, sheetname, RowNum, ColNum):
-        """
-        sheetname:表格Sheets名称
-        RowNum:行号 从0开始
-        ColNum:列号 从0开始
-        """
-        table = self.setTable(sheetname=sheetname)
-        celldata = table.cell_value(RowNum, ColNum)
-        return celldata
-
-    #读取元素标签和元素唯一标识
-    def locate(self, index, filepath="dataEngine\\data.xls", sheetname="element"):
-        """
-        filepath: 文件路径
-        sheetno：Sheet编号
-        index: 元素编号
-        返回值内容为：("id","inputid")、("xpath","/html/body/header/div[1]/nav")格式
-        """
-        table = self.setTable(filepath, sheetname)
-        for i in range(1, table.nrows):
-            if index in table.row_values(i):
-                return table.row_values(i)[1:3]
+#     #读取excel文件的table
+#     def setTable(self, filepath, sheetname):
+#         """
+#         filepath:文件路径
+#         sheetname：Sheet名称
+#         """
+#         data = xlrd.open_workbook(filepath)
+#         #通过索引顺序获取Excel表
+#         table = data.sheet_by_name(sheetname)
+#         return table
+# 
+#     #读取xls表格，使用生成器yield进行按行存储
+#     def getTabledata(self,filepath, sheetname):
+#         """
+#         filepath:文件路径
+#         sheetname：Sheet名称
+#         """
+#         table = self.setTable(filepath, sheetname)
+#         for args in range(1, table.nrows):
+#             #使用生成器 yield
+#             yield table.row_values(args)
+# 
+#     #获取单元格数据
+#     def getcelldata(self, sheetname, RowNum, ColNum):
+#         """
+#         sheetname:表格Sheets名称
+#         RowNum:行号 从0开始
+#         ColNum:列号 从0开始
+#         """
+#         table = self.setTable(sheetname=sheetname)
+#         celldata = table.cell_value(RowNum, ColNum)
+#         return celldata
+# 
+#     #读取元素标签和元素唯一标识
+#     def locate(self, index, filepath="dataEngine\\data.xls", sheetname="element"):
+#         """
+#         filepath: 文件路径
+#         sheetno：Sheet编号
+#         index: 元素编号
+#         返回值内容为：("id","inputid")、("xpath","/html/body/header/div[1]/nav")格式
+#         """
+#         table = self.setTable(filepath, sheetname)
+#         for i in range(1, table.nrows):
+#             if index in table.row_values(i):
+#                 return table.row_values(i)[1:3]
 
     #savePngName:生成图片的名称
     def savePngName(self, name):

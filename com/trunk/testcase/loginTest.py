@@ -30,6 +30,7 @@ class Test(unittest.TestCase):
     def testLoginSuccess(self):
 #         测试login
         self.lbo = LoginBO(self.driver)
+#         self.lbo.start()
         self.lbo.run()
 
 
