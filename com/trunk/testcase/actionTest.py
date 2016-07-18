@@ -7,6 +7,7 @@ Created on 2016年7月15日
 import unittest,time,os
 # import xlrd,xlsxwriter
 from com.trunk.actionkeyword import loginActionKey
+from com.trunk.actionkeyword import ActionKey
 from com.trunk.actionkeyword.ActionKey import ActionKey
 
 class actTest(unittest.TestCase):
