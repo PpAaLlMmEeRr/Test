@@ -7,7 +7,7 @@ Created on 2016年7月15日
 import unittest,time,os
 # import xlrd,xlsxwriter
 from com.trunk.actionkeyword import loginActionKey
-from com.trunk.actionkeyword.ActionKey import Actions
+from com.trunk.actionkeyword.ActionKey import ActionKey
 
 class actTest(unittest.TestCase):
 
@@ -105,13 +105,13 @@ def __generateTestCases():
     print os.getcwd()
     pathstr = os.path.abspath(os.path.join(os.getcwd(),"..","testdata","logindata.xls"))
     print pathstr
-    casedata = Actions.getTabledata(pathstr, "testfunction")
+    casedata = ActionKey.getTabledata(pathstr, "testfunction")
     for i in casedata:
         TCid = i[0]
         if i[3] == "Y":
             print "[Run]"+i[1]+"："
             print " + -"*8
-            table = Actions.getTabledata(pathstr, "testcases")
+            table = ActionKey.getTabledata(pathstr, "testcases")
             for index,txt in enumerate(table):
                 if (txt[2] == "Y") & (txt[0] == TCid):
                     print txt

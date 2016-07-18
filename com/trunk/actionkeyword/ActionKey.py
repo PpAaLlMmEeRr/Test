@@ -12,7 +12,7 @@ reload(sys)
 import xlrd.sheet
 import time, os
 
-class Actions(baseObject):
+class ActionKey(baseObject):
 	"""
 	BasePage封装所有页面都公用的方法，例如driver, url
 	"""

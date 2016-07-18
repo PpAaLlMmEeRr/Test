@@ -8,14 +8,14 @@ import time
 import sys
 reload(sys)
 # from com.trunk.page.basepage import BasePage
-from com.trunk.actionkeyword.ActionKey import Actions
+from com.trunk.actionkeyword.ActionKey import ActionKey
 from com.trunk.seleniumfactory.SeleniumFactory import *
 from selenium.webdriver.support.wait import WebDriverWait
 from xlrd import open_workbook
 from xlutils.copy import copy
 import xlrd,xlwt
 
-class LoginActionKW(Actions):
+class LoginActionKW(ActionKey):
 	"""定义关键字方法"""
 
 	def openBrowser(self):
