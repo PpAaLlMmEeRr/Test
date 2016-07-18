@@ -4,24 +4,21 @@ Created on 2016年7月15日
 
 @author: palmer
 '''
-import unittest,time
-
-from com.trunk.bo.loginBO import LoginBO
-from com.trunk.page.basepage import BasePage
-from com.trunk.page.loginpage import LoginPage
-from com.trunk.page.locator import Locator
-from com.trunk.actionkeyword import actionKeyword
-from com.trunk.seleniumfactory.SeleniumFactory import *
+import unittest,time,os
+# import xlrd,xlsxwriter
+from com.trunk.actionkeyword import loginActionKey
+from com.trunk.actionkeyword.ActionKey import Actions
 
 class actTest(unittest.TestCase):
 
     def setUp(self):
 # 开启webdriver
-        self.driver = SeleniumFactory().createWebDriver()
+#         self.driver = SeleniumFactory().createWebDriver()
+        pass
 
     def tearDown(self):
 # 关闭webdriver
-        self.driver.quit()
+#         self.driver.quit()
         pass
 
 
@@ -29,28 +26,33 @@ class actTest(unittest.TestCase):
     #脚本初始化
     @classmethod
     def setUpClass(cls):
-        # cls.driver = webdriver.Firefox()
-        # cls.driver.implicitly_wait(30)
+        cls.dur_time_start = time.time()
         pathstr = os.path.abspath(os.path.join(os.getcwd(),"..","testdata","logindata.xls"))
         cls.filepath = pathstr
-
+    
+    #脚本退出
+    @classmethod
+    def tearDownClass(cls):
+        cls.dur_time_stop = time.time()
+        print cls.dur_time_stop - cls.dur_time_start
+        print "End"
     
     #测试用例
-    def action(self, *txt):
+    def action(self, index, *txt):
         """
         测试Demo
         """
         
-        self._page_parameters = {"webdriver":self.driver}
-        exeKeyword = actionKeyword.Actionkeywords(**self._page_parameters)
+        exeKeyword = loginActionKey.LoginActionKW()
         exeKeyword.setLocatePath(actTest.filepath)
         
         case_id = txt[1]
         username = txt[4]
         password = txt[5]
-        # casedata = base.getTabledata(self.filepath, "Test Cases")
+#         testresult = txt[10]
         k =4
         stepdata = exeKeyword.getTabledata(self.filepath, "teststep")
+        
         for j in stepdata:
             if txt[0] == j[0]:
                 # print j[3]
@@ -70,7 +72,8 @@ class actTest(unittest.TestCase):
                     print j[2]
                     loc_1 = exeKeyword.locate(j[4])
                     loc_2 = exeKeyword.locate(j[5])
-                    exeKeyword.verifyLogin(loc_1, loc_2)
+                    testresult = exeKeyword.verifyLogin(loc_1, loc_2)
+                    
                 elif j[3] == "closeBrowser":
                     print j[2]
                     time.sleep(5)
@@ -82,37 +85,38 @@ class actTest(unittest.TestCase):
                 elif j[3] == "clickelement":
                     print j[2]
                     loc = exeKeyword.locate(j[4])
-                    exeKeyword.clickElement_i(2, loc)
-        pass
+#                     exeKeyword.clickElement_i(1, loc)
+                    exeKeyword.clickElement(loc)
+        
+
+        exeKeyword.set_test_result(actTest.filepath, index, testresult)
+    
     
     @staticmethod
-    def getTestFunc(*txt):
+    def getTestFunc(index,*txt):
         def func(self):
-            self.action(*txt)
+            self.action(index,*txt)
         return func
 
 
-    #脚本退出
-    @classmethod
-    def tearDownClass(cls):
-        print "End"
+    
         
 def __generateTestCases():
-#     login_page = BasePage.Action()
-#     driver = SeleniumFactory().createWebDriver()
     print os.getcwd()
     pathstr = os.path.abspath(os.path.join(os.getcwd(),"..","testdata","logindata.xls"))
-    casedata = LoginPage.getTabledata(pathstr, "testfunction")
+    print pathstr
+    casedata = Actions.getTabledata(pathstr, "testfunction")
     for i in casedata:
         TCid = i[0]
         if i[3] == "Y":
             print "[Run]"+i[1]+"："
             print " + -"*8
-            table = LoginPage.getTabledata(pathstr, "testcases")
-            for txt in table:
+            table = Actions.getTabledata(pathstr, "testcases")
+            for index,txt in enumerate(table):
                 if (txt[2] == "Y") & (txt[0] == TCid):
                     print txt
-                    setattr(actTest, 'test_%s_%s' % (txt[0], txt[1]), actTest.getTestFunc(*txt))
+                    row_num = index+1
+                    setattr(actTest, 'test_%s_%s' % (txt[0], txt[1]), actTest.getTestFunc(row_num,*txt))
 __generateTestCases()
 
 if __name__ == "__main__":

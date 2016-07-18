@@ -215,7 +215,14 @@ class BasePage(baseObject):
             return self.driver.find_element(*loc)
         except:
             print u"%s 页面中未能找到 %s 元素" % (self, loc)
-
+    
+    def check_element_display(self, *loc):
+        try:
+            WebDriverWait(self.driver, 10).until(lambda driver: driver.find_element(*loc).is_displayed())
+            return True
+        except:
+            return False
+    
     #重写一组元素定位方法
     def find_elements(self, *loc):
         #return self.driver.find_element(*loc)
@@ -226,7 +233,7 @@ class BasePage(baseObject):
             print u"%s 页面中未能找到 %s 元素" % (self, loc)
 
         #定位一组元素中索引为第i个的元素 i从0开始
-    def find_elements_i(self, loc, index=None):
+    def find_elements_i(self, loc ,index=None):
         #return self.driver.find_element(*loc)
         try:
             if len(self.driver.find_elements(*loc)):

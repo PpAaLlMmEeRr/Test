@@ -12,7 +12,7 @@ reload(sys)
 import xlrd.sheet
 import time, os
 
-class Action(baseObject):
+class Actions(baseObject):
 	"""
 	BasePage封装所有页面都公用的方法，例如driver, url
 	"""
@@ -106,10 +106,12 @@ class Action(baseObject):
 		if not expr:
 			self.saveScreenshot(self.driver, "Error")
 			raise msg
-		else:
 			return False
+		else:
+			return True
 
 	#读取excel文件的table
+	@classmethod
 	def setTable(self, filepath, sheetname):
 		"""
 		filepath:文件路径
@@ -119,16 +121,19 @@ class Action(baseObject):
 		#通过索引顺序获取Excel表
 		table = data.sheet_by_name(sheetname)
 		return table
-
+	
 	#读取xls表格，使用生成器yield进行按行存储
+	@classmethod
 	def getTabledata(self,filepath, sheetname):
 		"""
 		filepath:文件路径
 		sheetname：Sheet名称
 		"""
 		table = self.setTable(filepath, sheetname)
+		row_num = 1
 		for args in range(1, table.nrows):
-			#使用生成器 yield
+			row_num = args
+				#使用生成器 yield
 			yield table.row_values(args)
 
 	#获取单元格数据
@@ -141,9 +146,18 @@ class Action(baseObject):
 		table = self.setTable(sheetname=sheetname)
 		celldata = table.cell_value(RowNum, ColNum)
 		return celldata
+	
+	
+	def setLocatePath(self,pathstr):
+		self.filepath = pathstr
 
 	#读取元素标签和元素唯一标识
-	def locate(self, index, filepath="dataEngine\\data.xls", sheetname="element"):
+	def locate(self, index, filepath = "default", sheetname="testelement"):
+		if filepath == "default":
+			filepath = self.filepath
+		else:
+			filepath = filepath
+
 		"""
 		filepath: 文件路径
 		sheetno：Sheet编号
@@ -154,6 +168,17 @@ class Action(baseObject):
 		for i in range(1, table.nrows):
 			if index in table.row_values(i):
 				return table.row_values(i)[1:3]
+
+	#重写定义send_keys方法
+	def action_send_keys(self, loc, vaule, clear_first=True, click_first=True):
+		try:
+			if click_first:
+				self.find_element(*loc).click()
+			if clear_first:
+				self.find_element(*loc).clear()
+				self.find_element(*loc).send_keys(vaule)
+		except AttributeError:
+			print u"%s 页面中未能找到 %s 元素" % (self, loc)
 
 	#savePngName:生成图片的名称
 	def savePngName(self, name):

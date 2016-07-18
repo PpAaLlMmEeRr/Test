@@ -1,7 +1,7 @@
 eclipse.preferences.version=1
 encoding//com/comman/base.py=utf-8
-encoding//com/trunk/actionkeyword/BasePage.py=utf-8
-encoding//com/trunk/actionkeyword/actionKeyword.py=utf-8
+encoding//com/trunk/actionkeyword/ActionKey.py=utf-8
+encoding//com/trunk/actionkeyword/loginActionKey.py=utf-8
 encoding//com/trunk/bo/loginBO.py=utf-8
 encoding//com/trunk/exception/Exceptions.py=utf-8
 encoding//com/trunk/page/basepage.py=utf-8
@@ -11,6 +11,6 @@ encoding//com/trunk/testcase/actionTest.py=utf-8
 encoding//com/trunk/testcase/loginTest.py=utf-8
 encoding//com/trunk/testcase/test2.py=utf-8
 encoding//com/trunk/testcase/ttt.py=utf-8
-encoding//com/trunk/testdata/test333.py=utf-8
 encoding//com/trunk/testdata/testXLS.py=utf-8
 encoding//com/trunk/testdata/tttt.py=utf-8
+encoding//com/trunk/testdata/worksheet.py=utf-8
