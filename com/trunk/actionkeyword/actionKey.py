@@ -110,6 +110,17 @@ class ActionKey(baseObject):
 		else:
 			return True
 
+# 	检查excel中是否存在对应testfunction id对应的名称的 sheet
+	@classmethod
+	def checkSheetName(self,filepath,sheetname):
+		data = xlrd.open_workbook(filepath)
+		#通过索引顺序获取Excel表
+		try:
+			table = data.sheet_by_name(sheetname)
+			return True
+		except:
+			return False
+	
 	#读取excel文件的table
 	@classmethod
 	def setTable(self, filepath, sheetname):
@@ -130,9 +141,7 @@ class ActionKey(baseObject):
 		sheetname：Sheet名称
 		"""
 		table = self.setTable(filepath, sheetname)
-		row_num = 1
 		for args in range(1, table.nrows):
-			row_num = args
 				#使用生成器 yield
 			yield table.row_values(args)
 

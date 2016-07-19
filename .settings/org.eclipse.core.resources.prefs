@@ -1,6 +1,6 @@
 eclipse.preferences.version=1
 encoding//com/comman/base.py=utf-8
-encoding//com/trunk/actionkeyword/ActionKey.py=utf-8
+encoding//com/trunk/actionkeyword/actionKey.py=utf-8
 encoding//com/trunk/actionkeyword/loginActionKey.py=utf-8
 encoding//com/trunk/bo/loginBO.py=utf-8
 encoding//com/trunk/exception/Exceptions.py=utf-8

@@ -8,7 +8,7 @@ import time
 import sys
 reload(sys)
 # from com.trunk.page.basepage import BasePage
-from com.trunk.actionkeyword.ActionKey import ActionKey
+from com.trunk.actionkeyword.actionKey import ActionKey
 from com.trunk.seleniumfactory.SeleniumFactory import *
 from selenium.webdriver.support.wait import WebDriverWait
 from xlrd import open_workbook
@@ -126,12 +126,53 @@ class LoginActionKW(ActionKey):
 # 		else:
 # 			print self.driver.title
 # 			self.checkTrue(self.driver.find_element(*check_login_loc).text, u"登录失败")
+	
+	
+	def verifyLogoff(self, username_loc, password_loc,timeout = 10):
+		"""登录校验"""
 		
-	def set_test_result(self,filepath,index,testresult,msg_column=9,result_column=10):
+# 		轮询方法，测试跑完一个succ和一个fail的login case，需要平均=62s
+# 		-------------------------
+		result_dic = {}
+		count = 0
+		while (count < timeout):
+			try:
+				WebDriverWait(self.driver, 0.5).until(lambda driver: driver.find_element(*username_loc).is_displayed())
+				ifUsernameDisplay = True
+				print "succ find username_loc"
+				break
+			except:
+		   		ifUsernameDisplay = False
+		   		print "except from username_loc check"
+		   	try:
+				WebDriverWait(self.driver, 0.5).until(lambda driver: driver.find_element(*password_loc).is_displayed())
+				ifPasswordDisplay = True
+				print "succ find password_loc"
+				break
+			except:
+		   		print "except from password_loc check"
+		   		ifPasswordDisplay = False
+			count = count + 1
+			time.sleep(1)
+		
+		if ifUsernameDisplay or ifPasswordDisplay:
+			result_dic['testresult'] = True
+			return result_dic
+		else:
+			result_dic['testresult'] = False
+			result_dic['msg'] = "not find both of username_loc & password_loc"
+			print "not find both of username_loc & password_loc"
+			self.saveScreenshot(self.driver, "logoff_fail")
+			return result_dic	
+		
+			
+	def set_test_result(self,filepath,index,testresult,testcase_name = "testcases", msg_column=9,result_column=10):
 		rb = xlrd.open_workbook(filepath, formatting_info=True)
 		rs = rb.sheet_by_index(0)
+		testcase_name = testcase_name
+		sheet_index = rb._sheet_names.index(testcase_name)
 		wb = copy(rb)
-		ws = wb.get_sheet(2)
+		ws = wb.get_sheet(sheet_index)
 		red   = xlwt.easyxf('font: color-index red, bold on');
 		green   = xlwt.easyxf('font: color-index green, bold on');
 		if testresult.get('testresult'):

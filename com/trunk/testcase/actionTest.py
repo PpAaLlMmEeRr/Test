@@ -7,8 +7,7 @@ Created on 2016年7月15日
 import unittest,time,os
 # import xlrd,xlsxwriter
 from com.trunk.actionkeyword import loginActionKey
-from com.trunk.actionkeyword import ActionKey
-from com.trunk.actionkeyword.ActionKey import ActionKey
+from com.trunk.actionkeyword.actionKey import ActionKey
 
 class actTest(unittest.TestCase):
 
@@ -39,7 +38,7 @@ class actTest(unittest.TestCase):
         print "End"
     
     #测试用例
-    def action(self, index, *txt):
+    def action(self, sheetname,index, *txt):
         """
         测试Demo
         """
@@ -52,7 +51,7 @@ class actTest(unittest.TestCase):
         password = txt[5]
 #         testresult = txt[10]
         k =4
-        stepdata = exeKeyword.getTabledata(self.filepath, "teststep")
+        stepdata = exeKeyword.getTabledata(self.filepath, sheetname)
         
         for j in stepdata:
             if txt[0] == j[0]:
@@ -69,11 +68,23 @@ class actTest(unittest.TestCase):
                     print j[2]
                     loc = exeKeyword.locate(j[4])
                     exeKeyword.Submit(loc)
-                elif j[3] == "verifyLogin":
+                elif j[3] == "verifyLoginWithSetResult":
                     print j[2]
                     loc_1 = exeKeyword.locate(j[4])
                     loc_2 = exeKeyword.locate(j[5])
                     testresult = exeKeyword.verifyLogin(loc_1, loc_2)
+                
+                elif j[3] == "verifyLogoffWithSetResult":
+                    print j[2]
+                    loc_1 = exeKeyword.locate(j[4])
+                    loc_2 = exeKeyword.locate(j[5])
+                    testresult = exeKeyword.verifyLogoff(loc_1, loc_2)
+                
+                elif j[3] == "verifyLogin":
+                    print j[2]
+                    loc_1 = exeKeyword.locate(j[4])
+                    loc_2 = exeKeyword.locate(j[5])
+                    exeKeyword.verifyLogin(loc_1, loc_2)
                     
                 elif j[3] == "closeBrowser":
                     print j[2]
@@ -112,12 +123,17 @@ def __generateTestCases():
         if i[3] == "Y":
             print "[Run]"+i[1]+"："
             print " + -"*8
+            
+            sheetname = i[2]
+            if not ActionKey.checkSheetName(pathstr, sheetname):
+                sheetname = "teststeps"
+                
             table = ActionKey.getTabledata(pathstr, "testcases")
             for index,txt in enumerate(table):
                 if (txt[2] == "Y") & (txt[0] == TCid):
                     print txt
                     row_num = index+1
-                    setattr(actTest, 'test_%s_%s' % (txt[0], txt[1]), actTest.getTestFunc(row_num,*txt))
+                    setattr(actTest, 'test_%s_%s' % (txt[0], txt[1]), actTest.getTestFunc(sheetname,row_num,*txt))
 __generateTestCases()
 
 if __name__ == "__main__":
