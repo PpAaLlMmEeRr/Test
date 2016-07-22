@@ -7,7 +7,8 @@ Created on 2016年7月15日
 import unittest,time,os
 # import xlrd,xlsxwriter
 from com.trunk.actionkeyword import loginActionKey
-from com.trunk.actionkeyword.actionKey import ActionKey
+# from com.trunk.actionkeyword.actionKey import ActionKey
+from com.trunk.actionkeyword.loginActionKey import LoginActionKW
 
 class actTest(unittest.TestCase):
 
@@ -42,67 +43,72 @@ class actTest(unittest.TestCase):
         """
         测试Demo
         """
-        
-        exeKeyword = loginActionKey.LoginActionKW()
-        exeKeyword.setLocatePath(actTest.filepath)
-        
-        case_id = txt[1]
-        username = txt[4]
-        password = txt[5]
-#         testresult = txt[10]
-        k =4
-        stepdata = exeKeyword.getTabledata(self.filepath, sheetname)
-        
-        for j in stepdata:
-            if txt[0] == j[0]:
-                # print j[3]
-                if j[3] == "openBrowser":
-                    print j[2]
-                    exeKeyword.openBrowser()
-                elif j[3] == "input_Text":
-                    print j[2]
-                    loc = exeKeyword.locate(j[4])
-                    exeKeyword.input_Text(loc, txt[k])
-                    k += 1
-                elif j[3] == "click":
-                    print j[2]
-                    loc = exeKeyword.locate(j[4])
-                    exeKeyword.Submit(loc)
-                elif j[3] == "verifyLoginWithSetResult":
-                    print j[2]
-                    loc_1 = exeKeyword.locate(j[4])
-                    loc_2 = exeKeyword.locate(j[5])
-                    testresult = exeKeyword.verifyLogin(loc_1, loc_2)
-                
-                elif j[3] == "verifyLogoffWithSetResult":
-                    print j[2]
-                    loc_1 = exeKeyword.locate(j[4])
-                    loc_2 = exeKeyword.locate(j[5])
-                    testresult = exeKeyword.verifyLogoff(loc_1, loc_2)
-                
-                elif j[3] == "verifyLogin":
-                    print j[2]
-                    loc_1 = exeKeyword.locate(j[4])
-                    loc_2 = exeKeyword.locate(j[5])
-                    exeKeyword.verifyLogin(loc_1, loc_2)
+        try:
+            exeKeyword = loginActionKey.LoginActionKW()
+            exeKeyword.setLocatePath(actTest.filepath)
+            
+            case_id = txt[1]
+            username = txt[4]
+            password = txt[5]
+    #         testresult = txt[10]
+            k =4
+            stepdata = exeKeyword.getTabledata(self.filepath, sheetname)
+            
+            for j in stepdata:
+                if txt[0] == j[0]:
+                    # print j[3]
+                    if j[3] == "openBrowser":
+                        print j[2]
+                        exeKeyword.openBrowser()
+                    elif j[3] == "input_Text":
+                        print j[2]
+                        loc = exeKeyword.locate(j[4])
+                        exeKeyword.input_Text(loc, txt[k])
+                        k += 1
+                    elif j[3] == "click":
+                        print j[2]
+                        loc = exeKeyword.locate(j[4])
+                        exeKeyword.Submit(loc)
+                    elif j[3] == "verifyLoginWithSetResult":
+                        print j[2]
+                        loc_1 = exeKeyword.locate(j[4])
+                        loc_2 = exeKeyword.locate(j[5])
+                        testresult = exeKeyword.verifyLogin(loc_1, loc_2)
                     
-                elif j[3] == "closeBrowser":
-                    print j[2]
-                    time.sleep(5)
-                    exeKeyword.closeBrowser()
-                elif j[3] == "navigate":
-                    print j[2]
-                    url = j[4]
-                    exeKeyword.navigate(url)
-                elif j[3] == "clickelement":
-                    print j[2]
-                    loc = exeKeyword.locate(j[4])
-#                     exeKeyword.clickElement_i(1, loc)
-                    exeKeyword.clickElement(loc)
-        
-
-        exeKeyword.set_test_result(actTest.filepath, index, testresult)
-    
+                    elif j[3] == "verifyLogoffWithSetResult":
+                        print j[2]
+                        loc_1 = exeKeyword.locate(j[4])
+                        loc_2 = exeKeyword.locate(j[5])
+                        testresult = exeKeyword.verifyLogoff(loc_1, loc_2)
+                    
+                    elif j[3] == "verifyLogin":
+                        print j[2]
+                        loc_1 = exeKeyword.locate(j[4])
+                        loc_2 = exeKeyword.locate(j[5])
+                        exeKeyword.verifyLogin(loc_1, loc_2)
+                        
+                    elif j[3] == "closeBrowser":
+                        print j[2]
+                        time.sleep(5)
+                        exeKeyword.closeBrowser()
+                    elif j[3] == "navigate":
+                        print j[2]
+                        url = j[4]
+                        exeKeyword.navigate(url)
+                    elif j[3] == "clickelement":
+                        print j[2]
+                        loc = exeKeyword.locate(j[4])
+    #                     exeKeyword.clickElement_i(1, loc)
+                        exeKeyword.clickElement(loc)
+            
+            
+            exeKeyword.set_test_result(actTest.filepath, index, testresult)
+        except Exception as e:
+#             result_dic = {}
+#             result_dic['testresult'] = "Block"
+#             result_dic['msg'] = e.ToString()
+            testresult = {"testresult":"Block","msg":"e"}
+            exeKeyword.set_test_result(actTest.filepath, index, testresult)
     
     @staticmethod
     def getTestFunc(index,*txt):
@@ -117,7 +123,7 @@ def __generateTestCases():
     print os.getcwd()
     pathstr = os.path.abspath(os.path.join(os.getcwd(),"..","testdata","logindata.xls"))
     print pathstr
-    casedata = ActionKey.getTabledata(pathstr, "testfunction")
+    casedata = LoginActionKW.getTabledata(pathstr, "testfunction")
     for i in casedata:
         TCid = i[0]
         if i[3] == "Y":
@@ -125,10 +131,10 @@ def __generateTestCases():
             print " + -"*8
             
             sheetname = i[2]
-            if not ActionKey.checkSheetName(pathstr, sheetname):
+            if not LoginActionKW.checkSheetName(pathstr, sheetname):
                 sheetname = "teststeps"
                 
-            table = ActionKey.getTabledata(pathstr, "testcases")
+            table = LoginActionKW.getTabledata(pathstr, "testcases")
             for index,txt in enumerate(table):
                 if (txt[2] == "Y") & (txt[0] == TCid):
                     print txt

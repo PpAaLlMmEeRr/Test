@@ -175,7 +175,11 @@ class LoginActionKW(ActionKey):
 		ws = wb.get_sheet(sheet_index)
 		red   = xlwt.easyxf('font: color-index red, bold on');
 		green   = xlwt.easyxf('font: color-index green, bold on');
-		if testresult.get('testresult'):
+		yellow   = xlwt.easyxf('font: color-index yellow, bold on');
+		if testresult.get('testresult')=="Block":
+			ws.write(index,result_column,u"Block",yellow)
+			ws.write(index,msg_column,testresult.get('msg'),yellow)
+		elif testresult.get('testresult')==True:
 			ws.write(index,result_column,u"pass",green)
 		else:
 			ws.write(index,msg_column,testresult.get('msg'),red)
