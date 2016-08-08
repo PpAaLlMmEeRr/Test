@@ -8,6 +8,7 @@ encoding//com/trunk/page/basepage.py=utf-8
 encoding//com/trunk/page/locator.py=utf-8
 encoding//com/trunk/page/loginpage.py=utf-8
 encoding//com/trunk/remote/loginTest.py=utf-8
+encoding//com/trunk/remote/unit_create_sp.py=utf-8
 encoding//com/trunk/remote/unit_create_spv.py=utf-8
 encoding//com/trunk/testcase/actionTest.py=utf-8
 encoding//com/trunk/testcase/loginTest.py=utf-8
